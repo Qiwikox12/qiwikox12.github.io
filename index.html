@@ -1,394 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Terraria Boss HP Calculator</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: url('https://www.gamepur.com/wp-content/uploads/wp-content/uploads/2022/09/30051822/Terraria-Shimmer-Pool.jpg') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-            color: #fff;
-        }
-
-        /* Shimmer shine animation */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(200, 180, 255, 0.2) 50%, transparent);
-            background-size: 200% 100%;
-            animation: shimmer 10s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            background-color: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        }
-
-        h1 { text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            background-color: rgba(0,0,0,0.4);
-            border-radius: 10px 10px 0 0;
-            overflow: hidden;
-        }
-        .tabs button {
-            background: transparent;
-            border: none;
-            color: #fff;
-            padding: 15px 25px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .tabs button:hover { background: rgba(255,255,255,0.1); }
-        .tabs button.active { background: rgba(255,255,255,0.2); }
-
-        .tabcontent {
-            display: none;
-            padding: 30px;
-            animation: fade 0.5s;
-        }
-        @keyframes fade { from {opacity: 0;} to {opacity: 1;} }
-
-        label { font-size: 18px; display: block; margin: 15px 0 5px; }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-        }
-        button.calc {
-            padding: 12px 24px;
-            font-size: 18px;
-            background: rgba(150,100,255,0.5);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-        button.calc:hover { background: rgba(150,100,255,0.7); }
-
-        .result {
-            margin-top: 30px;
-            font-size: 28px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Shimmer Finder inline */
-        .shimmer-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .shimmer-col {
-            flex: 1;
-            min-width: 200px;
-        }
-        #result-box {
-            width: 100%;
-            padding: 15px;
-            font-size: 24px;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: #fff;
-            text-align: center;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Terraria Boss HP Calculator</h1>
 
-        <div class="tabs">
-            <button class="tablink active" onclick="openTab(event, 'tab1')">Simple Multiplier</button>
-            <button class="tablink" onclick="openTab(event, 'tab2')">Full Boss HP</button>
-            <button class="tablink" onclick="openTab(event, 'tab3')">Shimmer Finder</button>
-        </div>
+<div class="container">
+    <h1>Terraria Boss HP Calculator</h1>
 
-        <!-- Tab 1: Simple Multiplier -->
-        <div id="tab1" class="tabcontent" style="display: block;">
-            <p>Calculates the boss health multiplier in Expert or Master Mode based on player count (1–255 players).</p>
-            <label for="players1">Number of players:</label>
-            <input type="number" id="players1" min="1" max="255" value="1">
-            <div style="text-align:center;">
-                <button class="calc" onclick="calculateSimple()">Calculate</button>
-            </div>
-            <div id="result1" class="result"></div>
-        </div>
-
-        <!-- Tab 2: Full Boss HP -->
-        <div id="tab2" class="tabcontent">
-            <label>Number of players:</label>
-            <input type="number" id="players2" min="1" max="255" value="2">
-
-            <label>Boss:</label>
-            <select id="boss">
-                <option>King Slime</option>
-                <option>Eye of Cthulhu</option>
-                <option>Eater of Worlds</option>
-                <option>Brain of Cthulhu</option>
-                <option>Queen Bee</option>
-                <option>Skeletron</option>
-                <option>Deerclops</option>
-                <option>Wall of Flesh</option>
-                <option>Queen Slime</option>
-                <option>The Twins</option>
-                <option>The Destroyer</option>
-                <option>Skeletron Prime</option>
-                <option>Plantera</option>
-                <option>Golem</option>
-                <option>Duke Fishron</option>
-                <option>Empress of Light</option>
-                <option>Lunatic Cultist</option>
-                <option>Moon Lord</option>
-            </select>
-
-            <label>Difficulty mode:</label>
-            <select id="difficulty-select">
-                <option value="expert">Expert</option>
-                <option value="expertftw">Expert For the Worthy</option>
-                <option value="master">Master</option>
-                <option value="legendary">Legendary</option>
-            </select>
-
-            <div style="text-align:center;">
-                <button class="calc" onclick="calculateFull()">Calculate Boss Health</button>
-            </div>
-
-            <div id="result2" class="result"></div>
-        </div>
-
-        <!-- Tab 3: Shimmer Finder -->
-        <div id="tab3" class="tabcontent">
-            <h2 style="text-align:center; margin-bottom:30px;">Shimmer (Aether) Location Finder</h2>
-
-            <div class="shimmer-row">
-                <div class="shimmer-col">
-                    <label>Guide's first name:</label>
-                    <select id="guide-name">
-                        <option value="andrew">Andrew</option>
-                        <option value="asher">Asher</option>
-                        <option value="bradley">Bradley</option>
-                        <option value="brandon">Brandon</option>
-                        <option value="brett">Brett</option>
-                        <option value="brian">Brian</option>
-                        <option value="cole">Cole</option>
-                        <option value="colin">Colin</option>
-                        <option value="connor">Connor</option>
-                        <option value="codi">Codi</option>
-                        <option value="daniel">Daniel</option>
-                        <option value="dylan">Dylan</option>
-                        <option value="garrett">Garrett</option>
-                        <option value="harley">Harley</option>
-                        <option value="jack">Jack</option>
-                        <option value="jacob">Jacob</option>
-                        <option value="jake">Jake</option>
-                        <option value="jan">Jan</option>
-                        <option value="jeff">Jeff</option>
-                        <option value="jeffrey">Jeffrey</option>
-                        <option value="joe">Joe</option>
-                        <option value="kevin">Kevin</option>
-                        <option value="kyle">Kyle</option>
-                        <option value="levi">Levi</option>
-                        <option value="logan">Logan</option>
-                        <option value="luke">Luke</option>
-                        <option value="marty">Marty</option>
-                        <option value="maxwell">Maxwell</option>
-                        <option value="ryan">Ryan</option>
-                        <option value="scott">Scott</option>
-                        <option value="seth">Seth</option>
-                        <option value="steve">Steve</option>
-                        <option value="tanner">Tanner</option>
-                        <option value="trent">Trent</option>
-                        <option value="wyatt">Wyatt</option>
-                        <option value="zach">Zach</option>
-                    </select>
-                </div>
-
-                <div class="shimmer-col">
-                    <label>Jungle side:</label>
-                    <select id="jungle-side">
-                        <option value="left">Left</option>
-                        <option value="right">Right</option>
-                    </select>
-                </div>
-
-                <div class="shimmer-col">
-                    <label>World size:</label>
-                    <select id="world-size">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style="text-align:center;">
-                <button class="calc" onclick="calculateShimmer()">Calculate Shimmer Position</button>
-            </div>
-
-            <div style="margin-top:40px; text-align:center;">
-                <label style="font-size:20px;">X coordinate of Shimmer biome:</label>
-                <input type="text" id="result-box" readonly placeholder="Result will appear here">
-            </div>
-        </div>
+    <div class="tabs">
+        <button class="tablink active" data-tab="tab1">Simple Multiplier</button>
+        <button class="tablink" data-tab="tab2">Full Boss HP</button>
+        <button class="tablink" data-tab="tab3">Shimmer Finder</button>
     </div>
 
-    <script>
-        function openTab(evt, tabName) {
-            $(".tabcontent").hide();
-            $("#" + tabName).show();
-            $(".tablink").removeClass("active");
-            $(evt.currentTarget).addClass("active");
-        }
+    <div id="tab1" class="tabcontent" style="display:block">
+        <p style="text-align:center; opacity:0.9; margin-bottom:2em;">
+            Calculates the boss health multiplier in Expert/Master Mode
+        </p>
 
-        function calculateSimple() {
-            let players = parseInt($("#players1").val());
-            if (isNaN(players) || players < 1 || players > 255) {
-                $("#result1").html("Please enter a number between 1 and 255!");
-                return;
-            }
+        <label>Number of players (1–255):</label>
+        <input type="number" id="players1" min="1" max="255" value="1">
 
-            let multiplier = 1.0;
-            if (players === 1) multiplier = 1.0;
-            else if (players === 2) multiplier = 1.35;
-            else {
-                let current_boost = 0.35;
-                let total = 1 + current_boost;
-                for (let p = 3; p <= players; p++) {
-                    let new_boost = current_boost + (1 - current_boost) / 3;
-                    total += new_boost;
-                    current_boost = new_boost;
-                }
-                let unmodified = total;
-                multiplier = players >= 10 ? (unmodified * 2 + 8) / 3 : unmodified;
-            }
+        <button class="calc-btn" onclick="calculateSimple()">Calculate</button>
 
-            $("#result1").html(
-                `Health Multiplier: <strong>×${multiplier.toFixed(4)}</strong><br><br>` +
-                `Boss health increased by ${(multiplier * 100 - 100).toFixed(2)}%`
-            );
-        }
+        <div id="result1" class="result"></div>
+    </div>
 
-        function calculateFull() {
-            let players = parseInt($("#players2").val());
-            if (players < 1 || players > 255) {
-                $("#result2").html("Players: 1–255");
-                return;
-            }
+    <div id="tab2" class="tabcontent">
+        <label>Number of players:</label>
+        <input type="number" id="players2" min="1" max="255" value="2">
 
-            const bossHealthList = {
-                "King Slime": 2800,
-                "Eye of Cthulhu": 3640,
-                "Eater of Worlds": 15120,
-                "Brain of Cthulhu": 2125,
-                "Queen Bee": 4760,
-                "Skeletron": 8800,
-                "Deerclops": 11900,
-                "Wall of Flesh": 11200,
-                "Queen Slime": 28800,
-                "The Twins": 34500,
-                "The Destroyer": 120000,
-                "Skeletron Prime": 42000,
-                "Plantera": 42000,
-                "Golem": 90000,
-                "Duke Fishron": 72000,
-                "Empress of Light": 98000,
-                "Lunatic Cultist": 40000,
-                "Moon Lord": 217500
-            };
+        <label>Boss:</label>
+        <div class="custom-select-wrapper">
+            <div class="custom-select" id="boss-select">
+                <div class="select-trigger">King Slime</div>
+                <div class="options">
+                    <div class="option" data-value="King Slime">King Slime</div>
+                    <div class="option" data-value="Eye of Cthulhu">Eye of Cthulhu</div>
+                    <div class="option" data-value="Eater of Worlds">Eater of Worlds</div>
+                    <div class="option" data-value="Brain of Cthulhu">Brain of Cthulhu</div>
+                    <div class="option" data-value="Queen Bee">Queen Bee</div>
+                    <div class="option" data-value="Skeletron">Skeletron</div>
+                    <div class="option" data-value="Deerclops">Deerclops</div>
+                    <div class="option" data-value="Wall of Flesh">Wall of Flesh</div>
+                    <div class="option" data-value="Queen Slime">Queen Slime</div>
+                    <div class="option" data-value="The Twins">The Twins</div>
+                    <div class="option" data-value="The Destroyer">The Destroyer</div>
+                    <div class="option" data-value="Skeletron Prime">Skeletron Prime</div>
+                    <div class="option" data-value="Plantera">Plantera</div>
+                    <div class="option" data-value="Golem">Golem</div>
+                    <div class="option" data-value="Duke Fishron">Duke Fishron</div>
+                    <div class="option" data-value="Empress of Light">Empress of Light</div>
+                    <div class="option" data-value="Lunatic Cultist">Lunatic Cultist</div>
+                    <div class="option" data-value="Moon Lord">Moon Lord</div>
+                </div>
+            </div>
+        </div>
 
-            let health = bossHealthList[$("#boss").val()];
+        <label>Difficulty mode:</label>
+        <div class="custom-select-wrapper">
+            <div class="custom-select" id="difficulty-select">
+                <div class="select-trigger">Expert</div>
+                <div class="options">
+                    <div class="option" data-value="expert">Expert</div>
+                    <div class="option" data-value="expertftw">Expert For the Worthy</div>
+                    <div class="option" data-value="master">Master</div>
+                    <div class="option" data-value="legendary">Legendary</div>
+                </div>
+            </div>
+        </div>
 
-            const mode = $("#difficulty-select").val();
-            if (mode === "master") health *= 1.275;
-            if (mode === "expertftw") health *= 1.5;
-            if (mode === "legendary") health *= 1.7;
+        <button class="calc-btn" onclick="calculateFull()">Calculate Boss Health</button>
 
-            let multiplayerFactor = 1;
-            let healthAdded = 0.35;
+        <div id="result2" class="result"></div>
+    </div>
 
-            for (let i = 1; i < players; i++) {
-                multiplayerFactor += healthAdded;
-                healthAdded = healthAdded + (1 - healthAdded) / 3;
-            }
+    <div id="tab3" class="tabcontent">
+        <h2 style="text-align:center; margin:0 0 2em;">Aether (Shimmer) Location Finder</h2>
 
-            if (players >= 10) {
-                multiplayerFactor = (multiplayerFactor * 2 + 8) / 3;
-            }
+        <div class="shimmer-row">
+            <div>
+                <label>Guide's first name:</label>
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="guide-name-select">
+                        <div class="select-trigger">Joe</div>
+                        <div class="options">
+                            <div class="option" data-value="joe">Joe</div>
+                            <div class="option" data-value="connor">Connor</div>
+                            <div class="option" data-value="tanner">Tanner</div>
+                            <div class="option" data-value="wyatt">Wyatt</div>
+                            <div class="option" data-value="codi">Codi</div>
+                            <div class="option" data-value="levi">Levi</div>
+                            <div class="option" data-value="luke">Luke</div>
+                            <div class="option" data-value="jack">Jack</div>
+                            <div class="option" data-value="scott">Scott</div>
+                            <div class="option" data-value="logan">Logan</div>
+                            <div class="option" data-value="cole">Cole</div>
+                            <div class="option" data-value="asher">Asher</div>
+                            <div class="option" data-value="bradley">Bradley</div>
+                            <div class="option" data-value="jacob">Jacob</div>
+                            <div class="option" data-value="garrett">Garrett</div>
+                            <div class="option" data-value="dylan">Dylan</div>
+                            <div class="option" data-value="maxwell">Maxwell</div>
+                            <div class="option" data-value="steve">Steve</div>
+                            <div class="option" data-value="brett">Brett</div>
+                            <div class="option" data-value="andrew">Andrew</div>
+                            <div class="option" data-value="harley">Harley</div>
+                            <div class="option" data-value="kyle">Kyle</div>
+                            <div class="option" data-value="jake">Jake</div>
+                            <div class="option" data-value="ryan">Ryan</div>
+                            <div class="option" data-value="jeffrey">Jeffrey</div>
+                            <div class="option" data-value="seth">Seth</div>
+                            <div class="option" data-value="marty">Marty</div>
+                            <div class="option" data-value="brandon">Brandon</div>
+                            <div class="option" data-value="zach">Zach</div>
+                            <div class="option" data-value="jeff">Jeff</div>
+                            <div class="option" data-value="daniel">Daniel</div>
+                            <div class="option" data-value="trent">Trent</div>
+                            <div class="option" data-value="kevin">Kevin</div>
+                            <div class="option" data-value="brian">Brian</div>
+                            <div class="option" data-value="colin">Colin</div>
+                            <div class="option" data-value="jan">Jan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            let scaledHealth = Math.floor(health * multiplayerFactor);
+            <div>
+                <label>Jungle side:</label>
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="jungle-side-select">
+                        <div class="select-trigger">Left</div>
+                        <div class="options">
+                            <div class="option" data-value="left">Left</div>
+                            <div class="option" data-value="right">Right</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            $("#result2").html(`Boss Health:<br><strong>${scaledHealth.toLocaleString('en-US')}</strong>`);
-        }
+            <div>
+                <label>World size:</label>
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="world-size-select">
+                        <div class="select-trigger">Small</div>
+                        <div class="options">
+                            <div class="option" data-value="small">Small</div>
+                            <div class="option" data-value="medium">Medium</div>
+                            <div class="option" data-value="large">Large</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        function calculateShimmer() {
-            const name = $("#guide-name").val();
-            const side = $("#jungle-side").val();
-            const size = $("#world-size").val();
+        <button class="calc-btn" onclick="calculateShimmer()">Find Shimmer Location</button>
 
-            const nameLib = ["joe","connor","tanner","wyatt","codi","levi","luke","jack","scott","logan","cole","asher","bradley","jacob","garrett","dylan","maxwell","steve","brett","andrew","harley","kyle","jake","ryan","jeffrey","seth","marty","brandon","zach","jeff","daniel","trent","kevin","brian","colin","jan"];
-            const valueLib = [0.0000, 0.0278, 0.0556, 0.0833, 0.1111, 0.1389, 0.1667, 0.1994, 0.2222, 0.2500, 0.2778, 0.3056, 0.3333, 0.3611, 0.3889, 0.4167, 0.4444, 0.4722, 0.5000, 0.5278, 0.5556, 0.5833, 0.6111, 0.6389, 0.6667, 0.6944, 0.7222, 0.7500, 0.7778, 0.8056, 0.8333, 0.8611, 0.8889, 0.9167, 0.9444, 0.9722];
+        <div style="margin-top:40px; text-align:center;">
+            <div style="font-size:1.3rem; margin-bottom:12px; opacity:0.9;">
+                X coordinate of Shimmer biome:
+            </div>
+            <input type="text" id="result-box" readonly value="—">
+        </div>
+    </div>
+</div>
 
-            if (nameLib.indexOf(name) < 0) {
-                alert("Error: Unknown name");
-                return;
-            }
-
-            let _value = valueLib[nameLib.indexOf(name)];
-            let _side = side === "left" ? 0 : 1;
-            let _size = ["small", "medium", "large"].indexOf(size);
-
-            let initialValue = [[3800, 6000, 8000], [3276, 4992, 6552]];
-            let amplifier = [524, 1008, 1448];
-
-            let result;
-            if (_side === 0) {
-                result = initialValue[0][_size] - (amplifier[_size] * _value);
-            } else {
-                result = initialValue[1][_size] + (amplifier[_size] * _value);
-            }
-            result = Math.round(result);
-
-            document.getElementById('result-box').value = result;
-        }
-
-        $(document).ready(function() {
-            calculateSimple();
-        });
-    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="script.js"></script>
 </body>
-</html>
+</html>     

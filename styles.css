@@ -1,0 +1,238 @@
+:root {
+    --primary: #9b5de5;
+    --primary-dark: #7b3dd9;
+    --bg: rgba(15, 10, 35, 0.75);
+    --glass: rgba(30, 25, 60, 0.45);
+    --text: #f0efff;
+    --border: rgba(155, 93, 229, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    background: url('https://www.gamepur.com/wp-content/uploads/wp-content/uploads/2022/09/30051822/Terraria-Shimmer-Pool.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text);
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0f0a23 0%, #1a1240 100%);
+    opacity: 0.65;
+    z-index: -2;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(155,93,229,0.12) 50%, transparent 100%);
+    background-size: 300% 100%;
+    animation: shimmer 12s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes shimmer {
+    0%   { background-position: -300% 0; }
+    100% { background-position: 300%  0; }
+}
+
+.container {
+    max-width: 860px;
+    margin: 40px auto;
+    padding: 32px;
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.6rem;
+    margin-bottom: 0.8em;
+    background: linear-gradient(90deg, #d4a5ff, #9b5de5, #c77dff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.tablink {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tablink:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+}
+
+.tablink.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 6px 20px rgba(155,93,229,0.5);
+    transform: translateY(-2px);
+}
+
+.tabcontent {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.custom-select-wrapper {
+    position: relative;
+    margin: 18px 0;
+}
+
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.select-trigger:hover {
+    background: rgba(255,255,255,0.16);
+}
+
+.select-trigger::after {
+    content: "▼";
+    font-size: 0.8em;
+    opacity: 0.7;
+    transition: transform 0.3s ease;
+}
+
+.custom-select.open .select-trigger::after {
+    transform: rotate(180deg);
+}
+
+.options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(20,15,45,0.92);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-top: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all 0.25s ease;
+    z-index: 10;
+}
+
+.custom-select.open .options {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.option {
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.option:hover {
+    background: rgba(155,93,229,0.25);
+}
+
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 14px 18px;
+    margin: 10px 0 24px;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: white;
+    font-size: 1.1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(155,93,229,0.3);
+}
+
+.calc-btn {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 32px auto 0;
+    padding: 16px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #9b5de5, #c77dff);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(155,93,229,0.4);
+}
+
+.calc-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(155,93,229,0.55);
+}
+
+.result {
+    margin-top: 40px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(90deg, #e0d4ff, #c77dff, #9b5de5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.shimmer-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+  }
